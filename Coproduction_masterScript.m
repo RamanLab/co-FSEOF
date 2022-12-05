@@ -30,4 +30,3 @@ TargetProducts = {'EX_etoh_e';'EX_succ_e'}; %example - for e_coli_core model
 
 [FseofAll,multiFseof]= FSEOFTargets(model,TargetProducts);
 TargetsScoreTable = Targets_HO_score(model,multiFseof);
-
