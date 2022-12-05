@@ -25,7 +25,7 @@ multiFseofScoreTable = multiFseof_Score(model,multiFseof,Amp,KO);
 
 %% to study co-production for a single set of metabolites
 
-%TargetProducts = {'EX_ibutoh_e';'EX_succ_e'}; %example - for iML1515 model
+%TargetProducts = {'EX_ibutoh_e';'EX_succ_e'}; %example - for iMM904 model
 TargetProducts = {'EX_etoh_e';'EX_succ_e'}; %example - for e_coli_core model
 
 [FseofAll,multiFseof]= FSEOFTargets(model,TargetProducts);
