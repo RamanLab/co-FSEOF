@@ -1,5 +1,5 @@
 % to test and score higher-order interventions
-function [TargetsScoreTable] = Target_HO_score(model,multiFseof)
+function [TargetsScoreTable] = Targets_HO_score(model,multiFseof)
 
 %model: the GSMM with appropriate medium bounds applied
 %multiFseof: A matrix of reaction for product A,reaction for product B, amplification targets, deletion targets
