@@ -97,10 +97,4 @@ for i=1:inv
 end
 Result= vertcat(InterventionMax,fluxMaxMet1,fluxMaxMet2,mutantBiomassMax,InvTypeMax(1:length(InterventionMax)))';
 
-if strcmp(var,'ko') && ~isempty(Result{1,1}) 
-    Result(:,5) = {'K'};
-elseif strcmp(var,'amp') && ~isempty(Result{1,1}) 
-    Result(:,5) = {'A'};
-end
-
 end
