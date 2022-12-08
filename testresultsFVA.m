@@ -1,6 +1,6 @@
 %Uses fastFVA to test the effect of amplification/deletion of any target on
 %the flux of products and biomass
-function [Result]=testresultsFVA(model,testRxns,met1,met2,var)
+function [Result]=testresultsFVA(model,minBM,testRxns,met1,met2,var)
 
 %%%% input and output parameters
 %model: the GSMM with appropriate medium bounds applied
@@ -16,13 +16,13 @@ function [Result]=testresultsFVA(model,testRxns,met1,met2,var)
 rxnsList = horzcat(met1,met2);
 
 %maximum flux for secreted metabolites in wild type
-[minFlux,maxFlux] = fastFVA(model,100,'max','ibm_cplex',rxnsList);
+[minFlux,maxFlux] = fluxVariability(model,100,'max',rxnsList);
 minMetWT = {minFlux(1),minFlux(2)};
 maxMetWT = {maxFlux(1),maxFlux(2)};
 
 %set minimum biomass for mutant %default=25%
 fbaWT = optimizeCbModel(model);
-model = changeRxnBounds(model,model.rxns(model.c==1),0.25*fbaWT.f,'l');
+model = changeRxnBounds(model,model.rxns(model.c==1),minBM*fbaWT.f,'l');
 
 
 for i=1:length(testRxns)
@@ -39,7 +39,7 @@ for i=1:length(testRxns)
             fbaMet2(i) = solMut.x(strcmp(model.rxns,met2));
             biomass(i) = solMut.f;
             rxnsList= horzcat(met1,met2);
-            [minFluxMut,maxFluxMut] = fastFVA(modelMut,100,'max','ibm_cplex',rxnsList);
+            [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',rxnsList);
             fvaMinMet1(i) = minFluxMut(1); fvaMinMet2(i) = minFluxMut(2); 
             fvaMaxMet1(i) = maxFluxMut(1); fvaMaxMet2(i) = maxFluxMut(2); 
             clearAllMemoizedCaches
@@ -53,7 +53,7 @@ for i=1:length(testRxns)
             fbaMet2(i) = solMut.x(strcmp(model.rxns,met2));
             biomass(i) = solMut.f;
             rxnsList = horzcat(met1,met2);
-            [minFluxMut,maxFluxMut] = fastFVA(modelMut,100,'max','ibm_cplex',rxnsList);            
+            [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',rxnsList);            
             fvaMinMet1(i) = minFluxMut(1); fvaMinMet2(i) = minFluxMut(2);
             fvaMaxMet1(i) = maxFluxMut(1); fvaMaxMet2(i) = maxFluxMut(2); 
             clearAllMemoizedCaches
