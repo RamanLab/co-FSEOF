@@ -7,8 +7,8 @@ function [TargetsScoreTable] = Targets_HO_score(model,minBM,multiFseof)
 
 %to test higher-order interventions
 [Amp, KO, AmpKO_2, AmpKO_3] = deal({});
-Amp = testresultsFVATargets(model,multiFseof{:,1},multiFseof{:,2},{'amp'}); %multiple amps (A)
-KO = testresultsFVATargets(model,multiFseof{:,1},multiFseof{:,3},{'ko'}); %multiple KOs (K)
+Amp = testresultsFVATargets(model,minBM,multiFseof{:,1},multiFseof{:,2},{'amp'}); %multiple amps (A)
+KO = testresultsFVATargets(model,minBM,multiFseof{:,1},multiFseof{:,3},{'ko'}); %multiple KOs (K)
 AmpKO_2 = testresultsFVAMixedTargets(model,minBM,multiFseof{:,1},multiFseof{:,2},multiFseof{:,3},2); %Amp+KO (AK)
 AmpKO_3 = testresultsFVAMixedTargets(model,minBM,multiFseof{:,1},multiFseof{:,2},multiFseof{:,3},3); %Amp+Amp+KO, Amp+KO+KO (AAK,AKK)
 
