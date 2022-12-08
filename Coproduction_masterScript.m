@@ -27,5 +27,5 @@ multiFseofScoreTable = multiFseof_Score(model,multiFseof,Amp,KO);
 
 %TargetProducts = {'EX_ibutoh_e';'EX_succ_e'}; %example - for iMM904 model
 TargetProducts = {'EX_etoh_e';'EX_succ_e'}; %example - for e_coli_core model or iML1515 model
-[FseofAll,multiFseof]= FSEOFTargets(model,TargetProducts);
-TargetsScoreTable = Targets_HO_score(model,minBM,multiFseof);
+[FseofAllTargets,multiFseofTargets]= FSEOFTargets(model,TargetProducts);
+TargetsScoreTable = Targets_HO_score(model,minBM,multiFseofTargets);
