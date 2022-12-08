@@ -46,6 +46,7 @@ if strcmp(var,'amp')
                     fvaMinMet1(inv) = minFluxMut(1); fvaMinMet2(inv) = minFluxMut(2);
                     fvaMaxMet1(inv) = maxFluxMut(1); fvaMaxMet2(inv) = maxFluxMut(2);
                     Intervention{inv} = testRxns(i,:);
+                    InvType(inv) = {'A'};
                     clearAllMemoizedCaches
                 end
             end
@@ -68,6 +69,7 @@ elseif strcmp(var,'ko')
             fvaMinMet1(inv) = minFluxMut(1); fvaMinMet2(inv) = minFluxMut(2);
             fvaMaxMet1(inv) = maxFluxMut(1); fvaMaxMet2(inv) = maxFluxMut(2);
             Intervention{inv} = testRxns(i,:);
+            InvType(inv) = {'K'};
             clearAllMemoizedCaches
         end
     end
@@ -95,6 +97,6 @@ for i=1:inv
         mutantBiomassMax(temp) = num2cell(biomass(i));  
     end
 end
-Result= vertcat(InterventionMax,fluxMaxMet1,fluxMaxMet2,mutantBiomassMax,InvTypeMax(1:length(InterventionMax)))';
+Result= vertcat(InterventionMax,fluxMaxMet1,fluxMaxMet2,mutantBiomassMax,InvType(1:length(InterventionMax)))';
 
 end
