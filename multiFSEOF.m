@@ -1,5 +1,5 @@
 %to find co-optimization targets for all pairs of metabolites in a model
-function[FseofAll,multiFseof,Amp,KO] = multiFSEOF(model,minBM)
+function[FseofAll,multiFseof,Amp,KO] = multiFSEOF(model,minBM,solver)
 
 %%%% input and output parameters
 %model: the GSMM with appropriate medium bounds applied
@@ -31,8 +31,8 @@ FseofAll= FSEOFall(model);
     %testing the targets using FVA
     [Amp,KO] = deal(cell(length(multiFseof),10));
     for i=1:length(multiFseof)
-        Amp(i,:) = testresultsFVA(model,minBM,multiFseof{i,3},multiFseof{i,1},multiFseof{i,2},{'amp'});
-        KO(i,:) = testresultsFVA(model,minBM,multiFseof{i,4},multiFseof{i,1},multiFseof{i,2},{'ko'});
+        Amp(i,:) = testresultsFVA(model,minBM,solver,multiFseof{i,3},multiFseof{i,1},multiFseof{i,2},{'amp'});
+        KO(i,:) = testresultsFVA(model,minBM,solver,multiFseof{i,4},multiFseof{i,1},multiFseof{i,2},{'ko'});
     end
     
 end
