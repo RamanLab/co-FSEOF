@@ -1,7 +1,7 @@
 %Uses fastFVA to test the effect of mixture of amplification/deletion of any target on
 %the flux of specific products and biomass
 
-function [Result]=testresultsFVAMixedTargets(model,minBM,ProductRxnsList,AmpTargets,KoTargets,intrvSize)
+function [Result]=testresultsFVAMixedTargets(model,minBM,solver,ProductRxnsList,AmpTargets,KoTargets,intrvSize)
 
 %%%% input and output parameters
 %model: the GSMM with appropriate medium bounds applied
@@ -16,7 +16,11 @@ function [Result]=testresultsFVAMixedTargets(model,minBM,ProductRxnsList,AmpTarg
 [InterventionMin,fluxMinMet1,fluxMinMet2,mutantBiomassMin,InterventionMax,fluxMaxMet1,fluxMaxMet2,mutantBiomassMax]= deal({});
 
 %maximum flux for secreted metabolites in wild type
-[minFlux,maxFlux] = fluxVariability(model,100,'max',ProductRxnsList);
+if strcmp(solver,'ibm_cplex')
+    [minFlux,maxFlux] = fastFVA(model,100,'max','ibm_cplex',ProductRxnsList);
+else
+    [minFlux,maxFlux] = fluxVariability(model,100,'max',ProductRxnsList);
+end
 minMetWT = {minFlux(1),minFlux(2)};
 maxMetWT = {maxFlux(1),maxFlux(2)};
 
@@ -40,7 +44,11 @@ if intrvSize == 2
              if solMut.stat==1
                 inv=inv+1;
                 biomass(inv) = solMut.f;
-                [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',ProductRxnsList);            
+                if strcmp(solver,'ibm_cplex')
+                    [minFluxMut,maxFluxMut] = fastFVA(modelMut,100,'max','ibm_cplex',ProductRxnsList);
+                else
+                    [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',ProductRxnsList);
+                end         
                 fvaMinMet1(inv) = minFluxMut(1); fvaMinMet2(inv) = minFluxMut(2);
                 fvaMaxMet1(inv) = maxFluxMut(1); fvaMaxMet2(inv) = maxFluxMut(2);
                 Intervention{inv} = [AmpTargets(i),KoTargets(j)];
@@ -92,7 +100,11 @@ elseif intrvSize == 3
              if solMut.stat==1
                 inv=inv+1;
                 biomass(inv) = solMut.f;
-                [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',ProductRxnsList);            
+               if strcmp(solver,'ibm_cplex')
+                    [minFluxMut,maxFluxMut] = fastFVA(modelMut,100,'max','ibm_cplex',ProductRxnsList);
+                else
+                    [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',ProductRxnsList);
+                end              
                 fvaMaxMet1(inv) = maxFluxMut(1); fvaMaxMet2(inv) = maxFluxMut(2);
                 Intervention{inv} = [AmpTargets(i),KoTargets(j),KoTargets(j+1)];
                 invType(inv) = {'AKK'};
@@ -124,7 +136,11 @@ elseif intrvSize == 3
          if solMut.stat==1
                 inv=inv+1;
                 biomass(inv) = solMut.f;
-                [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',ProductRxnsList);            
+                if strcmp(solver,'ibm_cplex')
+                    [minFluxMut,maxFluxMut] = fastFVA(modelMut,100,'max','ibm_cplex',ProductRxnsList);
+                else
+                    [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',ProductRxnsList);
+                end        
                 fvaMinMet1(inv) = minFluxMut(1); fvaMinMet2(inv) = minFluxMut(2);
                 fvaMaxMet1(inv) = maxFluxMut(1); fvaMaxMet2(inv) = maxFluxMut(2);
                 Intervention{inv} = [AmpTargets(i),AmpTargets(i+1),KoTargets(j)];
@@ -158,6 +174,4 @@ elseif intrvSize == 3
     end
     Result= vertcat(InterventionMax,fluxMaxMet1,fluxMaxMet2,mutantBiomassMax,invTypeMax)';
 end
-end
-
-        
+end     
