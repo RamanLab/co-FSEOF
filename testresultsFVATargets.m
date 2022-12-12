@@ -1,6 +1,6 @@
 %Uses fastFVA to test the effect of multiple amplification/deletion of any target on
 %the flux of specific products and biomass
-function [Result]=testresultsFVATargets(model,minBM,ProductRxnsList,TargetRxns,var)
+function [Result]=testresultsFVATargets(model,minBM,solver,ProductRxnsList,TargetRxns,var)
 
 %%%% input and output parameters
 %model: the GSMM with appropriate medium bounds applied
@@ -15,7 +15,11 @@ function [Result]=testresultsFVATargets(model,minBM,ProductRxnsList,TargetRxns,v
 [fvaMaxMet1,fvaMaxMet2,biomass,fvaMinMet1,fvaMinMet2] = deal([]);
 
 %maximum flux for secreted metabolites in wild type
-[minFlux,maxFlux] = fluxVariability(model,100,'max',ProductRxnsList);
+if strcmp(solver,'ibm_cplex')
+    [minFlux,maxFlux] = fastFVA(model,100,'max','ibm_cplex',ProductRxnsList);
+else
+    [minFlux,maxFlux] = fluxVariability(model,100,'max',ProductRxnsList);
+end
 minMetWT = {minFlux(1),minFlux(2)};
 maxMetWT = {maxFlux(1),maxFlux(2)};
 
@@ -42,7 +46,11 @@ if strcmp(var,'amp')
                 if solMut.stat==1
                     inv = inv+1;
                     biomass(inv) = solMut.f;
-                    [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',ProductRxnsList);
+                    if strcmp(solver,'ibm_cplex')
+                        [minFluxMut,maxFluxMut] = fastFVA(modelMut,100,'max','ibm_cplex',ProductRxnsList);
+                    else
+                        [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',ProductRxnsList);
+                    end
                     fvaMinMet1(inv) = minFluxMut(1); fvaMinMet2(inv) = minFluxMut(2);
                     fvaMaxMet1(inv) = maxFluxMut(1); fvaMaxMet2(inv) = maxFluxMut(2);
                     Intervention{inv} = testRxns(i,:);
@@ -65,7 +73,11 @@ elseif strcmp(var,'ko')
         if solMut.stat==1
             inv=inv+1;
             biomass(inv) = solMut.f;
-            [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',ProductRxnsList);            
+            if strcmp(solver,'ibm_cplex')
+                [minFluxMut,maxFluxMut] = fastFVA(modelMut,100,'max','ibm_cplex',ProductRxnsList);
+            else
+                [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',ProductRxnsList);
+            end              
             fvaMinMet1(inv) = minFluxMut(1); fvaMinMet2(inv) = minFluxMut(2);
             fvaMaxMet1(inv) = maxFluxMut(1); fvaMaxMet2(inv) = maxFluxMut(2);
             Intervention{inv} = testRxns(i,:);
