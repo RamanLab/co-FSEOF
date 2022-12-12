@@ -15,9 +15,9 @@ function[FseofAll,multiFseof]= FSEOFTargets(model,TargetProducts)
     eliListInc = union(eliListInc, model.rxns(model.c==1));
 
     %elimination list for knockout targets
-    fastSL(model,0.01,1,model.rxns(findExcRxns(model)==1));
-    load(horzcat(model.description,'_Rxn_lethals.mat'));
-    eliListDec = union(eliListInc,Jsl);
+    [grRatio, grRateKO, grRateWT, hasEffect, delRxn, fluxSolution] = singleRxnDeletion(model);
+    EssRxns = model.rxns(grRatio < 1e-3);
+    eliListDec = union(eliListInc,EssRxns);
  %% running FSEOF for all exchange metabolites
     for i = 1:length(TargetProducts)
         [FluxMatrix, IncFlux, DecFlux] = FSEOF (model,TargetProducts(i),eliListInc, eliListDec);
