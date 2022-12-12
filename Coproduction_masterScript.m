@@ -1,6 +1,6 @@
 %to study co-production
 initCobraToolbox
-solver = 'ibm_cplex';
+solver = 'gurobi';
 solverOK = changeCobraSolver(solver,'all');
 
 %%choose organism and conditions
