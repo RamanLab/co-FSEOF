@@ -1,6 +1,6 @@
 %Uses fastFVA to test the effect of amplification/deletion of any target on
 %the flux of products and biomass
-function [Result]=testresultsFVA(model,minBM,testRxns,met1,met2,var)
+function [Result]=testresultsFVA(model,minBM,solver,testRxns,met1,met2,var)
 
 %%%% input and output parameters
 %model: the GSMM with appropriate medium bounds applied
@@ -16,7 +16,11 @@ function [Result]=testresultsFVA(model,minBM,testRxns,met1,met2,var)
 rxnsList = horzcat(met1,met2);
 
 %maximum flux for secreted metabolites in wild type
-[minFlux,maxFlux] = fluxVariability(model,100,'max',rxnsList);
+if strcmp(solver,'ibm_cplex')
+    [minFlux,maxFlux] = fastFVA(model,100,'max','ibm_cplex',rxnsList);
+else
+    [minFlux,maxFlux] = fluxVariability(model,100,'max',rxnsList);
+end
 minMetWT = {minFlux(1),minFlux(2)};
 maxMetWT = {maxFlux(1),maxFlux(2)};
 
@@ -39,7 +43,11 @@ for i=1:length(testRxns)
             fbaMet2(i) = solMut.x(strcmp(model.rxns,met2));
             biomass(i) = solMut.f;
             rxnsList= horzcat(met1,met2);
-            [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',rxnsList);
+            if strcmp(solver,'ibm_cplex')
+                [minFluxMut,maxFluxMut] = fastFVA(modelMut,100,'max','ibm_cplex',rxnsList);
+            else
+                [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',rxnsList);
+            end
             fvaMinMet1(i) = minFluxMut(1); fvaMinMet2(i) = minFluxMut(2); 
             fvaMaxMet1(i) = maxFluxMut(1); fvaMaxMet2(i) = maxFluxMut(2); 
             clearAllMemoizedCaches
@@ -53,7 +61,11 @@ for i=1:length(testRxns)
             fbaMet2(i) = solMut.x(strcmp(model.rxns,met2));
             biomass(i) = solMut.f;
             rxnsList = horzcat(met1,met2);
-            [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',rxnsList);            
+            if strcmp(solver,'ibm_cplex')
+                [minFluxMut,maxFluxMut] = fastFVA(modelMut,100,'max','ibm_cplex',rxnsList);
+            else
+                [minFluxMut,maxFluxMut] = fluxVariability(modelMut,100,'max',rxnsList);
+            end           
             fvaMinMet1(i) = minFluxMut(1); fvaMinMet2(i) = minFluxMut(2);
             fvaMaxMet1(i) = maxFluxMut(1); fvaMaxMet2(i) = maxFluxMut(2); 
             clearAllMemoizedCaches
