@@ -14,6 +14,8 @@ function [Result]=testresultsFVAMixedTargets(model,minBM,solver,ProductRxnsList,
 
 
 [InterventionMin,fluxMinMet1,fluxMinMet2,mutantBiomassMin,InterventionMax,fluxMaxMet1,fluxMaxMet2,mutantBiomassMax]= deal({});
+[Intervention,invType,invTypeMin,invTypeMax]= deal({});
+[fvaMinMet1,fvaMinMet2,fvaMaxMet1,fvaMaxMet2,biomass] = deal([]);
 
 %maximum flux for secreted metabolites in wild type
 if strcmp(solver,'ibm_cplex')
