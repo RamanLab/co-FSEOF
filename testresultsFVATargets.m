@@ -12,6 +12,7 @@ function [Result]=testresultsFVATargets(model,minBM,solver,ProductRxnsList,Targe
 
 
 [InterventionMin,fluxMinMet1,fluxMinMet2,mutantBiomassMin,InterventionMax,fluxMaxMet1,fluxMaxMet2,mutantBiomassMax]= deal({});
+[Intervention,InvType]= deal({});
 [fvaMaxMet1,fvaMaxMet2,biomass,fvaMinMet1,fvaMinMet2] = deal([]);
 
 %maximum flux for secreted metabolites in wild type
