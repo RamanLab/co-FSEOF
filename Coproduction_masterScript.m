@@ -21,12 +21,10 @@ model = readCbModel('e_coli_core.xml'); %core model
 %% to study co-production for all pairs of metabolites in a model
 minBM = 0.25; %minimum biomass of mutant - given in percentage of wild-type biomass
 modelSol = optimizeCbModel(model);
-[FseofAll,multiFseof,Amp,KO] = multiFSEOF(model,minBM,solver);
-multiFseofScoreTable = multiFseof_Score(model,multiFseof,Amp,KO);
+coFseofScoreTable = coFSEOF(model,minBM,solver);
 
-%% to study co-production for a single set of metabolites
+%%o study co-production for a single set of metabolites
 
 %TargetProducts = {'EX_ibutoh_e';'EX_succ_e'}; %example - for iMM904 model
 TargetProducts = {'EX_etoh_e';'EX_succ_e'}; %example - for e_coli_core model or iML1515 model
-[FseofAllTargets,multiFseofTargets]= FSEOFTargets(model,TargetProducts);
-TargetsScoreTable = Targets_HO_score(model,minBM,solver,multiFseofTargets);
+TargetsScoreTable= coFSEOFTargets(model,minBM,solver,TargetProducts);
