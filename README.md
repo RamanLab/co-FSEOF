@@ -15,9 +15,9 @@ Organisms studied in master script: Ecoli (iML15151.xml) and yeast (iMM904.xml)
 Scripts common to both analysis: FSEOF.m
 
 Scripts for co-production of all pairs of metabolites in a model: 
-FSEOFall.m; multiFSEOF.m; multiFseof_Score.m; testresultsFVA.m
+FSEOFall.m; coFSEOF.m; testresultsFVA.m
 
 Scripts for co-production of specific set of metabolites in a model: 
-FSEOFTargets.m; testresultsFVATargets.m; testresultsFVAMixedTargets.m; Targets_HO_score.m
+coFSEOFTargets.m; testresultsFVATargets.m; testresultsFVAMixedTargets.m
 
 All the analysis were performed on MATLAB R2018a and COBRAToolbox v.3.0 and IBM Cplex 12.8 solver.
